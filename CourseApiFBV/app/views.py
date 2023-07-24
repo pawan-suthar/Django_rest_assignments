@@ -6,7 +6,7 @@ from rest_framework import status
 from .models import Course
 from .courseserializer import CourseSerializer
 
-# Create your views here.
+
 @api_view(["GET","POST"])
 def courselistview(request):
     if request.method == "GET":
@@ -19,9 +19,7 @@ def courselistview(request):
             ser.save() #save data in python obj
             return Response(ser.data, status=status.HTTP_201_CREATED) #return serliazied data
         return Response(ser.errors)
-
-
-    
+   
 @api_view(["GET","PUT","DELETE"])
 def coursedetailview(request,pk):
     try:
@@ -31,16 +29,12 @@ def coursedetailview(request,pk):
     if request.method == "GET":
         ser = CourseSerializer(course)
         return Response(ser.data)
-    
-
     elif request.method == "PUT":
          ser = CourseSerializer(course,data=request.data)
          if ser.is_valid():
              ser.save()
              return Response(ser.data)
          return Response(ser.errors)
-    
-    
     elif request.method == "DELETE":
         course.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
