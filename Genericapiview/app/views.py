@@ -2,25 +2,62 @@ from django.shortcuts import render
 from requests import request
 from .models import Course, CourseSerializer
 from rest_framework import mixins, generics #used to get handler methods
-class CourseListView(mixins.ListModelMixin,mixins.CreateModelMixin,generics.GenericAPIView):
+#  example of generic api view with seprate imports
+
+# class CourseListView(generics.ListAPIView, generics.CreateAPIView):
+#                             #used for only list #use for create
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer
+
+
+# example of generic api view with single import
+class CourseListView(generics.ListCreateAPIView):
+                    #used for list and create 
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
-    def get(self,request):
-        return self.list(request)
-    def post(self,request):
-        return self.create(request)
-
-class CourseDetailView(mixins.RetrieveModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin,generics.GenericAPIView):
+    #  with single import
+class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
+    # now i can delete update and retive in single import 
     queryset = Course.objects.all()
-    serializer_class = CourseSerializer
+    serializer_class = CourseSerializer 
 
-    def get(self,request,pk):
-        return self.retrieve(request,pk)
-    def put(self,request,pk):
-        return self.update(request,pk)
-    def delete(self,request,pk):
-        return self.destroy(request,pk)
+# with multiple imports on generic views
+class CourseDetailView(generics.RetrieveAPIView, generics.UpdateAPIView, generics.DestroyAPIView):
+    # RetrieveAPIView used for only retrive 
+    # pdateAPIView for update
+    # DestroyAPIView for delete
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer 
+
+
+
+# class CourseListView(mixins.ListModelMixin,mixins.CreateModelMixin,generics.GenericAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer
+
+#     def get(self,request):
+#         return self.list(request)
+#     def post(self,request):
+#         return self.create(request)
+
+
+
+
+
+
+# here i use mixins + generic get put handle methods 
+
+# class CourseDetailView(mixins.RetrieveModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin,generics.GenericAPIView):
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer
+
+#     def get(self,request,pk):
+#         return self.retrieve(request,pk)
+#     def put(self,request,pk):
+#         return self.update(request,pk)
+#     def delete(self,request,pk):
+#         return self.destroy(request,pk)
 
 
 
