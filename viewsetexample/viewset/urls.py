@@ -1,10 +1,16 @@
 
 from django.contrib import admin
-from django.urls import path
-from app import views as v
+from django.urls import path , include
+from rest_framework.routers import DefaultRouter
+# from app import views as v
+from app.views import CourseViewSet
+
+router = DefaultRouter()
+router.register('course',CourseViewSet,basename="viewset")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/course', v.CourseListView.as_view(), name="listview"),
-    path('api/course/<int:pk>', v.CourseDetailView.as_view(), name="detailview"),
+    path('api/', include(router.urls))
+    # path('api/', include('app.urls')),
+   
 ]

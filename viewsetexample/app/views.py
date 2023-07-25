@@ -1,7 +1,12 @@
 from django.shortcuts import render
+from rest_framework.response import Response
 from requests import request
 from .models import Course, CourseSerializer
 from rest_framework import mixins, generics #used to get handler methods
+from rest_framework.viewsets import ViewSet
+from rest_framework import status
+
+
 #  example of generic api view with seprate imports
 
 # class CourseListView(generics.ListAPIView, generics.CreateAPIView):
@@ -11,16 +16,51 @@ from rest_framework import mixins, generics #used to get handler methods
 
 
 # example of generic api view with single import
-class CourseListView(generics.ListCreateAPIView):
-                    #used for list and create 
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
+# class CourseListView(generics.ListCreateAPIView):
+#                     #used for list and create 
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer
 
-    #  with single import
-class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
-    # now i can delete update and retive in single import 
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer 
+#     #  with single import
+# class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     # now i can delete update and retive in single import 
+#     queryset = Course.objects.all()
+#     serializer_class = CourseSerializer 
+
+
+########################### viewset ###############################
+"""1. viewset
+    2. model viewset"""
+
+class CourseViewSet(ViewSet):
+    # some action like mixins
+
+    # normal operations
+    def list(self,request):
+        courses = Course.objects.all()
+        ser = CourseSerializer(courses, many=True)
+        return Response(ser.data)
+    
+    def create(self,request):
+        ser = CourseSerializer(data= request.data)
+        if ser.is_valid():
+            ser.save()
+            return Response(ser.data)
+        return Response(ser.errors)
+    
+    # pk based operaion 
+    def retrieve(self,request,pk):
+        try:
+            course = Course.objects.get(pk=pk)  
+        except Course.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        ser = CourseSerializer(course)
+        return Response(ser.data)
+
+
+
+
+
 
 
 
