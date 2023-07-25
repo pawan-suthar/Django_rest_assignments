@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from requests import request
 from .models import Course, CourseSerializer
 from rest_framework import mixins, generics #used to get handler methods
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ViewSet , ModelViewSet
 from rest_framework import status
 
 
@@ -32,6 +32,8 @@ from rest_framework import status
 """1. viewset
     2. model viewset"""
 
+
+##### normal view set ########
 class CourseViewSet(ViewSet):
     # some action like mixins
 
@@ -56,6 +58,13 @@ class CourseViewSet(ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         ser = CourseSerializer(course)
         return Response(ser.data)
+
+
+
+####### model view set #######
+class CourseViewSet(ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
 
 
 
