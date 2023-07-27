@@ -3,16 +3,6 @@
 from.models import * 
 from rest_framework import serializers
 
-# class CourseSer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Course
-#         fields = "__all__"
-
-# class InstructorSer(serializers.ModelSerializer):
-#     courses = CourseSer(many=True, read_only=True)
-#     class Meta:
-#         model = Instructor
-#         fields = "__all__"
 
 class CourseSer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -24,3 +14,16 @@ class InstructorSer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Instructor
         fields = ["name", "courses"]
+
+
+        
+# class CourseSer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Course
+#         fields = "__all__"
+
+# class InstructorSer(serializers.ModelSerializer):
+#     courses = CourseSer(many=True, read_only=True)
+#     class Meta:
+#         model = Instructor
+#         fields = "__all__"
